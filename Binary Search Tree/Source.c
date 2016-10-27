@@ -334,7 +334,7 @@ BST_ITEM* find(BST_ITEM* treeRoot, char seekKey)
 	if (treeRoot == NULL)
 	{
 		//return error
-		return -1;
+		return NULL;
 	}//if
 
 	BST_ITEM *currentItem = treeRoot;
