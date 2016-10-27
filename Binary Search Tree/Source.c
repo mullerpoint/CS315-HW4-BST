@@ -48,6 +48,7 @@ int preOrderTrav(BST_ITEM*); //post-order traverse the tree
 BST_ITEM* find(BST_ITEM*, char); //find the node with that key
 int push(STACK_ITEM**, BST_ITEM*); //Push BST Node to stack
 BST_ITEM* pop(STACK_ITEM**); //Pop BST Node from stack
+bool isEmpty(STACK_ITEM*); //Check if the stack is empty
 
 //
 
@@ -113,8 +114,18 @@ main()
 			//find the data
 			BST_ITEM *temp;
 			temp = find(ptrToBST_A, toupper(tempItemKey));
-
-			printf("Found the string '%s' there\n", temp->payload);
+			
+			//if the item was found print out the string
+			if (temp != NULL)
+			{
+				printf("Found the string '%s' there\n", temp->payload);
+			}
+			//if the item was not found it the tree report that
+			else
+			{
+				printf("The search key was not found\n");
+			}
+			
 
 			break;
 
@@ -243,7 +254,7 @@ int inOrderTrav(BST_ITEM* treeRoot)
 		else
 		{
 			//check that the stack is not empty
-			if (stackPtr != NULL)
+			if (!isEmpty(stackPtr)/*stackPtr != NULL*/)
 			{
 				//backtrack
 				currentRoot = pop(&stackPtr);
@@ -297,7 +308,7 @@ int preOrderTrav(BST_ITEM* treeRoot)
 		}//while
 
 		//if root it null and stack is empty we've finished
-		if ((currentRoot == NULL) && (stackPtr == NULL))
+		if ((currentRoot == NULL) && (isEmpty(stackPtr)/*stackPtr == NULL*/))
 		{
 			//return success
 			return 1;
@@ -334,18 +345,33 @@ BST_ITEM* find(BST_ITEM* treeRoot, char seekKey)
 		//sought value is larger than current root
 		if (seekKey > (currentItem->keyValue))
 		{
-			currentItem = currentItem->rItem;
-		}
+			if (currentItem->rItem != NULL)
+			{
+				currentItem = currentItem->rItem;
+			}
+			else
+			{
+				return NULL;
+			}
+				
+		}//if
 		//sought value is smaller than current root 
 		else
 		{
-			currentItem = currentItem->lItem;
-		}
-	}
+			if (currentItem->lItem != NULL)
+			{
+				currentItem = currentItem->lItem;
+			}
+			else
+			{
+				return NULL;
+			}
+		}//else
+	}//while
 
 
 	return currentItem;
-}
+}//find
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -386,3 +412,16 @@ BST_ITEM* pop(STACK_ITEM** stackTop)
 	}
 
 }//pop
+
+//check if the stack is empty
+bool isEmpty(STACK_ITEM* stackPtr)
+{
+	if (stackPtr == NULL)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
